@@ -32,6 +32,7 @@ class QrCodeScanner : AppCompatActivity() {
         startQrCodeScanner()
 
 
+
     }
 
 
@@ -115,11 +116,7 @@ class QrCodeScanner : AppCompatActivity() {
         super.onPause()
     }
 
-    override fun onBackPressed() {
-        super.onBackPressed()
-        val intent = Intent(this, MainActivity::class.java)
-        startActivity(intent)
-    }
+
 
 }
 

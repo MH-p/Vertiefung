@@ -8,9 +8,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.google.android.material.floatingactionbutton.FloatingActionButton
 
 class MainActivity : AppCompatActivity() {
-//    private lateinit var recyclerView: RecyclerView;
-    val text :String="Random";
-    val userPic: Int =R.drawable.images;
+
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -19,11 +17,10 @@ class MainActivity : AppCompatActivity() {
         configureRecyclerView()
 
 
-
     }
 
     private fun configureRecyclerView() {
-        val recyclerView=findViewById<RecyclerView>(R.id.userProfileList);
+        val recyclerView = findViewById<RecyclerView>(R.id.userProfileList);
 
         // this creates a vertical layout Manager
         recyclerView.layoutManager = LinearLayoutManager(this)
@@ -34,8 +31,16 @@ class MainActivity : AppCompatActivity() {
         // This loop will create 20 Views containing
         // the image with the count of view
         for (i in 1..20) {
-            data.add(UserViewModel(R.drawable.images, "John Doe","john.doe@web.de","+49 176 315789"))
+            data.add(
+                UserViewModel(
+                    R.drawable.images,
+                    "John Doe",
+                    "john.doe@web.de",
+                    "+49 176 315789"
+                )
+            )
         }
+
 
         // This will pass the ArrayList to our Adapter
         val adapter = RecyclerViewAdapter(data)
@@ -43,39 +48,21 @@ class MainActivity : AppCompatActivity() {
         // Setting the Adapter with the recyclerview
         recyclerView.adapter = adapter
 
+
+
+
+        val intent = Intent(this, UserProfile::class.java)
+        adapter.setOnUserClickListener(object : RecyclerViewAdapter.onUserClickListener {
+            override fun onUserClick(postion: Int) {
+
+                startActivity(intent)
+
+            }
+
+
+        })
+
     }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
     private fun configureButtons() {

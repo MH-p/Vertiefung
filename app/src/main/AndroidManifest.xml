@@ -28,7 +28,9 @@
         </activity>
         <activity
             android:name=".QrCodeScanner"
-            android:exported="true"></activity>
+          android:parentActivityName=".MainActivity">
+
+        </activity>
     </application>
 
 </manifest>
