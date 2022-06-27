@@ -1,92 +1,104 @@
 package com.example.vertiefungqrvisitenkartenapp
 
-import android.content.pm.PackageManager
+import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import android.widget.Toast
-import androidx.core.app.ActivityCompat
-import androidx.core.content.ContextCompat
-import com.budiyev.android.codescanner.AutoFocusMode
-import com.budiyev.android.codescanner.CodeScanner
-import com.budiyev.android.codescanner.CodeScannerView
-import com.budiyev.android.codescanner.DecodeCallback
-import com.budiyev.android.codescanner.ErrorCallback
-import com.budiyev.android.codescanner.ScanMode
-import java.util.jar.Manifest
+import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
+import com.google.android.material.floatingactionbutton.FloatingActionButton
 
 class MainActivity : AppCompatActivity() {
-
-    private lateinit var codeScanner: CodeScanner
-
+//    private lateinit var recyclerView: RecyclerView;
+    val text :String="Random";
+    val userPic: Int =R.drawable.images;
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-       setContentView(R.layout.activity_main)
-startQrCodeScanner()
+        setContentView(R.layout.activity_main)
+        configureButtons()
+        configureRecyclerView()
+
+
 
     }
 
+    private fun configureRecyclerView() {
+        val recyclerView=findViewById<RecyclerView>(R.id.userProfileList);
 
-    private fun startQrCodeScanner() {
-        if (ContextCompat.checkSelfPermission(
-                this,
-                android.Manifest.permission.CAMERA
-            ) == PackageManager.PERMISSION_DENIED
-        ) {
-            ActivityCompat.requestPermissions(
-                this,
-                arrayOf(android.Manifest.permission.CAMERA),
-                123
-            )
-        } else {
-            startScanning()
-        }
-    }
+        // this creates a vertical layout Manager
+        recyclerView.layoutManager = LinearLayoutManager(this)
 
-    private fun startScanning() {
-        setContentView(R.layout.qr_code_scanner)
-        val scannerView = findViewById<CodeScannerView>(R.id.scanner_view)
+        // ArrayList of class ItemsViewModel
+        val data = ArrayList<UserViewModel>()
 
-        codeScanner = CodeScanner(this, scannerView)
-
-        // Parameters (default values)
-        codeScanner.camera = CodeScanner.CAMERA_BACK // or CAMERA_FRONT or specific camera id
-        codeScanner.formats = CodeScanner.ALL_FORMATS // list of type BarcodeFormat,
-        // ex. listOf(BarcodeFormat.QR_CODE)
-        codeScanner.autoFocusMode = AutoFocusMode.SAFE // or CONTINUOUS
-        codeScanner.scanMode = ScanMode.SINGLE // or CONTINUOUS or PREVIEW
-        codeScanner.isAutoFocusEnabled = true // Whether to enable auto focus or not
-        codeScanner.isFlashEnabled = false // Whether to enable flash or not
-
-        // Callbacks
-        codeScanner.decodeCallback = DecodeCallback {
-            runOnUiThread {
-                Toast.makeText(this, "Scan result: ${it.text}", Toast.LENGTH_LONG).show()
-            }
-        }
-        codeScanner.errorCallback = ErrorCallback { // or ErrorCallback.SUPPRESS
-            runOnUiThread {
-                Toast.makeText(
-                    this, "Camera initialization error: ${it.message}",
-                    Toast.LENGTH_LONG
-                ).show()
-            }
+        // This loop will create 20 Views containing
+        // the image with the count of view
+        for (i in 1..20) {
+            data.add(UserViewModel(R.drawable.images, "John Doe","john.doe@web.de","+49 176 315789"))
         }
 
-        scannerView.setOnClickListener {
-            codeScanner.startPreview()
+        // This will pass the ArrayList to our Adapter
+        val adapter = RecyclerViewAdapter(data)
+
+        // Setting the Adapter with the recyclerview
+        recyclerView.adapter = adapter
+
+    }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    private fun configureButtons() {
+        configureGoToScanner()
+    }
+
+    private fun configureGoToScanner() {
+        val gotToScannerButton = findViewById<FloatingActionButton>(R.id.floatingActionButton)
+        gotToScannerButton.setOnClickListener {
+            val intent = Intent(this, QrCodeScanner::class.java)
+            startActivity(intent)
         }
 
+
     }
 
-    override fun onResume() {
-        super.onResume()
-//        codeScanner.startPreview()
+    override fun onBackPressed() {
+        super.onBackPressed();
+        finish()
     }
 
-    override fun onPause() {
-//        codeScanner.releaseResources()
-        super.onPause()
-    }
 }
+
+
+
 
