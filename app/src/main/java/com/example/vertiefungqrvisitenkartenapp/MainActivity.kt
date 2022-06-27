@@ -50,8 +50,9 @@ class MainActivity : AppCompatActivity() {
 
 
 
-
         val intent = Intent(this, UserProfile::class.java)
+
+        intent.putExtra("userImage",R.drawable.images)
         adapter.setOnUserClickListener(object : RecyclerViewAdapter.onUserClickListener {
             override fun onUserClick(postion: Int) {
 
