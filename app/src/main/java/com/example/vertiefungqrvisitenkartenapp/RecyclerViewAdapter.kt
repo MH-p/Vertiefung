@@ -1,16 +1,12 @@
 package com.example.vertiefungqrvisitenkartenapp
 
 
-import android.content.Intent
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.TextView
 import androidx.cardview.widget.CardView
-import androidx.appcompat.app.AppCompatActivity
-import androidx.constraintlayout.widget.ConstraintLayout
-import androidx.core.content.ContextCompat.startActivity
 
 
 import androidx.recyclerview.widget.RecyclerView
@@ -19,15 +15,15 @@ import androidx.recyclerview.widget.RecyclerView
 class RecyclerViewAdapter(private val mList: List<UserViewModel>) :
     RecyclerView.Adapter<RecyclerViewAdapter.ViewHolder>() {
 
-    private lateinit var userListener: onUserClickListener;
+    private lateinit var userListener: OnUserClickListener;
 
-    interface onUserClickListener {
+    interface OnUserClickListener {
         fun onUserClick(postion: Int)
 
 
     }
 
-    fun setOnUserClickListener(listener: onUserClickListener) {
+    fun setOnUserClickListener(listener: OnUserClickListener) {
         userListener = listener;
     }
 
@@ -67,7 +63,7 @@ class RecyclerViewAdapter(private val mList: List<UserViewModel>) :
     }
 
     // Holds the views for adding it to image and text
-    class ViewHolder(ItemView: View, listener: onUserClickListener) :
+    class ViewHolder(ItemView: View, listener: OnUserClickListener) :
         RecyclerView.ViewHolder(ItemView) {
         val userPictureView: ImageView = itemView.findViewById(R.id.userPictureView)
         val nameView: TextView = itemView.findViewById(R.id.nameView)

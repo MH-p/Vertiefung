@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "649666258283",
+    "project_id": "vertiefungfhws",
+    "storage_bucket": "vertiefungfhws.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:649666258283:android:2eade3e2d296bbcaaad82e",
+        "android_client_info": {
+          "package_name": "com.example.vertiefungqrvisitenkartenapp"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "649666258283-krvs4ukfi02chpmvb9feo163kk8gfs9j.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCkJ7louKkbvfzhLSdYO0czzyNoEsEHF1I"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "649666258283-krvs4ukfi02chpmvb9feo163kk8gfs9j.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

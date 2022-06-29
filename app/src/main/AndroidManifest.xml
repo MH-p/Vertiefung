@@ -15,22 +15,28 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.Design.NoActionBar">
         <activity
+            android:name=".ManageContacts"
+            android:exported="false"
+            android:parentActivityName=".MainActivity" />
+        <activity
             android:name=".UserProfile"
-            android:exported="false" />
+            android:exported="false"
+            android:parentActivityName=".MainActivity" />
+
+        <activity
+            android:name=".QrCodeScanner"
+            android:parentActivityName=".MainActivity"/>
+
+
         <activity
             android:name=".MainActivity"
             android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
-
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity
-            android:name=".QrCodeScanner"
-          android:parentActivityName=".MainActivity">
 
-        </activity>
     </application>
 
 </manifest>

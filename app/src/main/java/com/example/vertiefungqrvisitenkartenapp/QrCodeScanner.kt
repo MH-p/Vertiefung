@@ -74,6 +74,7 @@ class QrCodeScanner : AppCompatActivity() {
 //        setContentView(R.layout.activity_qr_code_scanner)
         val scannerView = findViewById<CodeScannerView>(R.id.scanner_view)
 
+
         codeScanner = CodeScanner(this, scannerView)
 
         // Parameters (default values)
