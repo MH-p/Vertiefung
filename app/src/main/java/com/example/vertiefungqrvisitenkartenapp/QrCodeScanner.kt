@@ -1,23 +1,16 @@
 package com.example.vertiefungqrvisitenkartenapp
 
-import android.content.Intent
+import android.content.ContentValues.TAG
 import android.content.pm.PackageManager
-import android.os.Build
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import android.view.View
+import android.util.Log
 import android.widget.Button
 import android.widget.Toast
-import androidx.annotation.RequiresApi
+import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
-import androidx.core.view.isVisible
-import com.budiyev.android.codescanner.AutoFocusMode
-import com.budiyev.android.codescanner.CodeScanner
-import com.budiyev.android.codescanner.CodeScannerView
-import com.budiyev.android.codescanner.DecodeCallback
-import com.budiyev.android.codescanner.ErrorCallback
-import com.budiyev.android.codescanner.ScanMode
+import com.budiyev.android.codescanner.*
+import com.google.firebase.database.*
 import java.util.*
 
 
@@ -32,7 +25,6 @@ class QrCodeScanner : AppCompatActivity() {
         startQrCodeScanner()
 
 
-
     }
 
 
@@ -45,7 +37,7 @@ class QrCodeScanner : AppCompatActivity() {
 
 
         }
-        val addFriendButton =findViewById<Button>(R.id.addFriendButton)
+        val addFriendButton = findViewById<Button>(R.id.addFriendButton)
         addFriendButton.setOnClickListener {
 
         }
@@ -67,6 +59,7 @@ class QrCodeScanner : AppCompatActivity() {
             )
         } else {
             startScanning()
+            loadAndSaveScannedUser("2222")
         }
     }
 
@@ -89,7 +82,11 @@ class QrCodeScanner : AppCompatActivity() {
         // Callbacks
         codeScanner.decodeCallback = DecodeCallback {
             runOnUiThread {
+
+
                 Toast.makeText(this, "Scan result: ${it.text}", Toast.LENGTH_LONG).show()
+
+
             }
         }
         codeScanner.errorCallback = ErrorCallback { // or ErrorCallback.SUPPRESS
@@ -105,7 +102,50 @@ class QrCodeScanner : AppCompatActivity() {
             codeScanner.startPreview()
         }
 
+
     }
+
+
+    private fun loadAndSaveScannedUser(phoneNumberOfScannedUser: String) {
+
+        val database =
+            FirebaseDatabase.getInstance("https://vertiefungfhws-default-rtdb.europe-west1.firebasedatabase.app")
+                .getReference("Data/Users")
+
+        database.addChildEventListener(object : ChildEventListener {
+            override fun onChildAdded(dataSnapshot: DataSnapshot, prevChildKey: String?) {
+                val user: UserData? = dataSnapshot.getValue(UserData::class.java)
+                if (user != null && user.phoneNumber == phoneNumberOfScannedUser) {
+                    saveScannedUser(user)
+                }
+
+            }
+
+            override fun onChildChanged(dataSnapshot: DataSnapshot, prevChildKey: String?) {}
+            override fun onChildRemoved(dataSnapshot: DataSnapshot) {}
+            override fun onChildMoved(dataSnapshot: DataSnapshot, prevChildKey: String?) {}
+            override fun onCancelled(databaseError: DatabaseError) {}
+        })
+
+
+    }
+
+
+    fun saveScannedUser(user: UserData) {
+
+        val database =
+            FirebaseDatabase.getInstance("https://vertiefungfhws-default-rtdb.europe-west1.firebasedatabase.app")
+                .getReference("Data/Contacts")
+
+        database.child(user.phoneNumber).setValue(user).addOnSuccessListener {
+            Toast.makeText(this, "Friend Added!", Toast.LENGTH_LONG).show()
+        }.addOnFailureListener {
+            Toast.makeText(this, "Not ok", Toast.LENGTH_LONG).show()
+        }
+
+
+    }
+
 
     override fun onResume() {
         super.onResume()
@@ -118,6 +158,7 @@ class QrCodeScanner : AppCompatActivity() {
     }
 
 
-
 }
+
+
 
