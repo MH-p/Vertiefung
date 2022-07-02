@@ -1,83 +1,74 @@
 package com.example.vertiefungqrvisitenkartenapp
 
-
-
-import android.R
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.ImageView
 import android.widget.TextView
-import androidx.annotation.NonNull
+import androidx.cardview.widget.CardView
 import androidx.recyclerview.widget.RecyclerView
-import com.firebase.ui.database.FirebaseRecyclerAdapter
-import com.firebase.ui.database.FirebaseRecyclerOptions
 
 
-class RecyclerViewAdapter(
-    @NonNull options: FirebaseRecyclerOptions<UserData>
-) :
-    FirebaseRecyclerAdapter<UserData, RecyclerViewAdapter.UserViewholder>(options) {
-    // Function to bind the view in Card view(here
-    // "person.xml") iwth data in
-    // model class(here "person.class")
-    override fun onBindViewHolder(
-        @NonNull holder: UserViewholder,
-        position: Int, @NonNull model: UserData
-    ) {
+class RecyclerViewAdapter(private val userList: ArrayList<UserData>) :
+    RecyclerView.Adapter<RecyclerViewAdapter.MyViewHolder>() {
 
-        // Add firstname from model class (here
-        // "person.class")to appropriate view in Card
-        // view (here "person.xml")
-        holder.firstname.setText(model.userFirstName)
+    private lateinit var userListener: OnUserClickListener;
 
-        // Add lastname from model class (here
-        // "person.class")to appropriate view in Card
-        // view (here "person.xml")
-        holder.lastname.setText(model.userLastName)
+    interface OnUserClickListener {
+        fun onUserClick(position: Int)
 
 
     }
 
-    // Function to tell the class about the Card view (here
-    // "person.xml")in
-    // which the data will be shown
-    @NonNull
-    override fun onCreateViewHolder(
-        @NonNull parent: ViewGroup,
-        viewType: Int
-    ): UserViewholder {
-        val view = LayoutInflater.from(parent.context)
-         .inflate(R.layout.user_view_design, parent, false)
-        return UserViewholder(view)
+    fun setOnUserClickListener(listener: OnUserClickListener) {
+        userListener = listener;
     }
 
-    // Sub Class to create references of the views in Crad
-    // view (here "person.xml")
-    inner class UserViewholder(@NonNull itemView: View) :
+
+    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): MyViewHolder {
+
+        val itemView = LayoutInflater.from(parent.context).inflate(
+            R.layout.user_view_design,
+            parent, false
+        )
+        return MyViewHolder(itemView,userListener)
+
+    }
+
+    override fun onBindViewHolder(holder: MyViewHolder, position: Int) {
+
+        val currentitem = userList[position]
+
+        holder.firstName.text = currentitem.userFirstName
+//        holder.lastName.text = currentitem.userLastName
+        holder.email.text = currentitem.email
+
+
+    }
+
+    override fun getItemCount(): Int {
+
+        return userList.size
+    }
+
+
+    class MyViewHolder(itemView: View, listener: OnUserClickListener) :
         RecyclerView.ViewHolder(itemView) {
-        var firstname: TextView
-        var lastname: TextView
-        var age: TextView
+
+        val firstName: TextView = itemView.findViewById(R.id.nameView)
+        val email: TextView = itemView.findViewById(R.id.emailView)
 
         init {
-            firstname = itemView.findViewById(R.id.)
-            lastname = itemView.findViewById(R.id.lastname)
-            age = itemView.findViewById(R.id.age)
+            itemView.setOnClickListener {
+
+                listener.onUserClick(adapterPosition);
+            }
         }
+
+
     }
+
 }
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 //class RecyclerViewAdapter(private val userList: List<UserData>) :

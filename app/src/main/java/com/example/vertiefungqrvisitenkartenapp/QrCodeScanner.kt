@@ -59,17 +59,14 @@ class QrCodeScanner : AppCompatActivity() {
             )
         } else {
             startScanning()
-            loadAndSaveScannedUser("2222")
+            loadAndSaveScannedUser("1232312")
         }
     }
 
     private fun startScanning() {
-//        setContentView(R.layout.activity_qr_code_scanner)
+
         val scannerView = findViewById<CodeScannerView>(R.id.scanner_view)
-
-
         codeScanner = CodeScanner(this, scannerView)
-
         // Parameters (default values)
         codeScanner.camera = CodeScanner.CAMERA_BACK // or CAMERA_FRONT or specific camera id
         codeScanner.formats = CodeScanner.ALL_FORMATS // list of type BarcodeFormat,
@@ -82,10 +79,7 @@ class QrCodeScanner : AppCompatActivity() {
         // Callbacks
         codeScanner.decodeCallback = DecodeCallback {
             runOnUiThread {
-
-
                 Toast.makeText(this, "Scan result: ${it.text}", Toast.LENGTH_LONG).show()
-
 
             }
         }
@@ -136,8 +130,8 @@ class QrCodeScanner : AppCompatActivity() {
         val database =
             FirebaseDatabase.getInstance("https://vertiefungfhws-default-rtdb.europe-west1.firebasedatabase.app")
                 .getReference("Data/Contacts")
-
-        database.child(user.phoneNumber).setValue(user).addOnSuccessListener {
+//todo zuerst eigene tel dann gescante tel
+        database.child("2222").child(user.phoneNumber).setValue(user).addOnSuccessListener {
             Toast.makeText(this, "Friend Added!", Toast.LENGTH_LONG).show()
         }.addOnFailureListener {
             Toast.makeText(this, "Not ok", Toast.LENGTH_LONG).show()

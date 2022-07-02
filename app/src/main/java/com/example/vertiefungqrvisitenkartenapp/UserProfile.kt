@@ -9,6 +9,7 @@ import com.budiyev.android.codescanner.CodeScanner
 
 class UserProfile : AppCompatActivity() {
     private var userImageInt: Int = 0
+    private var userName :String=""
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_user_profile)
@@ -24,12 +25,9 @@ class UserProfile : AppCompatActivity() {
     }
 
     private fun getData() {
-        if (intent.hasExtra("userImage")) {
-            userImageInt = intent.getIntExtra("userImage", 1)
-
-
-
-
+        if (intent.hasExtra("userName")) {
+//            userImageInt = intent.getIntExtra("userImage", 1)
+userName= intent.getStringExtra("userName").toString()
 
         } else {
 
@@ -40,8 +38,10 @@ class UserProfile : AppCompatActivity() {
     }
 
     private fun setData() {
-        val userImage = findViewById<ImageView>(R.id.userProfileImage);
-        userImage.setImageResource(userImageInt);
+//        val userImage = findViewById<ImageView>(R.id.userProfileImage);
+//        userImage.setImageResource(userImageInt);
+//val
+
 
     }
 
