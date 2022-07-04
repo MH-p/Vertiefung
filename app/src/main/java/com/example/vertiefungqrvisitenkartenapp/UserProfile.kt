@@ -6,6 +6,7 @@ import android.net.Uri
 import android.os.Bundle
 import android.widget.ImageView
 import android.widget.TextView
+import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
@@ -16,7 +17,6 @@ import com.google.firebase.database.ValueEventListener
 import com.google.firebase.storage.FirebaseStorage
 import java.io.File
 
-
 class UserProfile : AppCompatActivity() {
     private var user: UserData? = null
     private lateinit var socialMediaArrayList: ArrayList<SocialMediaData>
@@ -25,11 +25,10 @@ class UserProfile : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_user_profile)
-
         socialMediaRecyclerview = findViewById(R.id.socialMediaRecyclerView)
         socialMediaRecyclerview.layoutManager = LinearLayoutManager(this)
         socialMediaRecyclerview.setHasFixedSize(true)
-        socialMediaArrayList = arrayListOf<SocialMediaData>()
+        socialMediaArrayList = arrayListOf()
         configureUserProfile()
     }
 
@@ -41,10 +40,10 @@ class UserProfile : AppCompatActivity() {
 
     private fun getData() {
         intent?.let {
-            user = intent.extras?.getParcelable<UserData>("user")
+            user = intent.extras?.getParcelable("user")
         }
 
-        val userPhoneNumber = user?.phoneNumber ?: "can't fetch Data!"
+        val userPhoneNumber = user?.phoneNumber ?: "0"
 
         val database =
             FirebaseDatabase.getInstance("https://vertiefungfhws-default-rtdb.europe-west1.firebasedatabase.app")
@@ -53,38 +52,26 @@ class UserProfile : AppCompatActivity() {
         database.addValueEventListener(object : ValueEventListener {
 
             override fun onDataChange(snapshot: DataSnapshot) {
-
                 if (snapshot.exists()) {
-
                     for (userSnapshot in snapshot.children) {
                         val socialMediaAccountLink =
                             userSnapshot.getValue(SocialMediaData::class.java)
                         socialMediaArrayList.add(socialMediaAccountLink!!)
-
                     }
                     val adapter = SocialMediaRecyclerAdapter(socialMediaArrayList)
                     socialMediaRecyclerview.adapter = adapter
 
-
                     adapter.setOnUserClickListener(object :
                         SocialMediaRecyclerAdapter.OnUserClickListener {
                         override fun onUserClick(position: Int) {
-
                             val browserIntent =
                                 Intent(Intent.ACTION_VIEW, Uri.parse("http://www.google.com"))
-                            startActivity(browserIntent)
-
-                        }
-
+                            startActivity(browserIntent) }
                     })
-
                 }
             }
-
             override fun onCancelled(error: DatabaseError) {
-                TODO("Not yet implemented")
             }
-
 
         })
 
@@ -92,9 +79,6 @@ class UserProfile : AppCompatActivity() {
     }
 
     private fun setData() {
-//        val userImage = findViewById<ImageView>(R.id.userProfileImage);
-//        userImage.setImageResource(userImageInt);
-
 
         val fullUserName = user?.userFirstName + " " + user?.userLastName
 
@@ -114,7 +98,6 @@ class UserProfile : AppCompatActivity() {
                 .getReference(it)
         }
 
-
         val localFile = File.createTempFile("temp", "jpg")
 
         storage?.getFile(localFile)?.addOnSuccessListener {
@@ -123,8 +106,7 @@ class UserProfile : AppCompatActivity() {
             userProfileImage.setImageBitmap(profileImage)
 
         }?.addOnFailureListener {
-
-
+            Toast.makeText(this, "Could Not Fetch Image!", Toast.LENGTH_SHORT).show()
         }
 
 

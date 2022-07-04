@@ -16,22 +16,20 @@ import com.google.firebase.database.ValueEventListener
 class MainActivity : AppCompatActivity() {
     private lateinit var userArrayList: ArrayList<UserData>
     private lateinit var userRecyclerview: RecyclerView
+    private var phoneNumber:String=""
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
-//        checkIfUserIsAlreadyRegistered()
+        checkIfUserIsAlreadyRegistered()
 
         userRecyclerview = findViewById(R.id.userProfileList)
         userRecyclerview.layoutManager = LinearLayoutManager(this)
         userRecyclerview.setHasFixedSize(true)
-        userArrayList = arrayListOf<UserData>()
-
+        userArrayList = arrayListOf()
 
         configureButtons()
-
         configureRecyclerView()
-
 
     }
 
@@ -39,7 +37,7 @@ class MainActivity : AppCompatActivity() {
     private fun configureRecyclerView() {
         val database =
             FirebaseDatabase.getInstance("https://vertiefungfhws-default-rtdb.europe-west1.firebasedatabase.app")
-                .getReference("Data/Contacts").child("2222")//Todo hier eigene tel
+                .getReference("Data/Contacts").child(phoneNumber)
 
         val intent = Intent(this, UserProfile::class.java)
         database.addValueEventListener(object : ValueEventListener {
@@ -70,42 +68,31 @@ class MainActivity : AppCompatActivity() {
             }
 
             override fun onCancelled(error: DatabaseError) {
-                TODO("Not yet implemented")
             }
-
-
         })
 
     }
 
 
-
     private fun configureButtons() {
-        configureGoToScanner()
-    }
-
-    private fun configureGoToScanner() {
-        val gotToScannerButton = findViewById<FloatingActionButton>(R.id.floatingActionButton)
-        gotToScannerButton.setOnClickListener {
+        val gotToManageContactsButton = findViewById<FloatingActionButton>(R.id.floatingActionButton)
+        gotToManageContactsButton.setOnClickListener {
             val intent = Intent(this, ManageContacts::class.java)
             startActivity(intent)
         }
     }
 
 
+
     private fun checkIfUserIsAlreadyRegistered() {
         val sharedPreferences = getSharedPreferences("sharedPrefs", Context.MODE_PRIVATE)
-        val savedFirstName = sharedPreferences.getString("FIRST_NAME", null)
-        val savedLastName = sharedPreferences.getString("LAST_NAME", null)
-        val savedPhoneNumber = null
-        val savedEmail = sharedPreferences.getString("EMAIL", null)
-        val savedDescription = sharedPreferences.getString("DESCRIPTION", null)
+        val savedPhoneNumber = sharedPreferences.getString("PHONE_NUMBER", null)
 
         if (savedPhoneNumber.isNullOrBlank()) {
             val intent = Intent(this, UserRegister::class.java)
             startActivity(intent)
         } else {
-            //todo load all kontatks for phonenumber
+            phoneNumber=savedPhoneNumber
         }
 
 
@@ -113,7 +100,7 @@ class MainActivity : AppCompatActivity() {
 
 
     override fun onBackPressed() {
-        super.onBackPressed();
+        super.onBackPressed()
         finish()
     }
 

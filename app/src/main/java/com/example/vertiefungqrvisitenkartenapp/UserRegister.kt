@@ -4,6 +4,7 @@ import android.content.Context
 import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
+import android.view.Gravity
 import android.widget.Button
 import android.widget.ImageView
 import android.widget.TextView
@@ -19,100 +20,71 @@ class UserRegister : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_user_register)
-        socialMediaList = arrayListOf<SocialMediaData>()
+        socialMediaList = arrayListOf()
         configureButtons()
-
-
     }
 
     private fun configureButtons() {
         configureRegisterButton()
-        configureImageButton()
+        configureSelectImageButton()
         configureAddSocialMediaButton()
-
     }
 
     private fun configureAddSocialMediaButton() {
-        val addSocialMediaButton = findViewById<Button>(R.id.userRegisterenterSocialMediaButton);
+        val addSocialMediaButton = findViewById<Button>(R.id.userRegisterenterSocialMediaButton)
 
         addSocialMediaButton.setOnClickListener {
             val socialMediaLink = findViewById<TextView>(R.id.userRegisterSocialMediaAccountText)
-
             val socialMediaData = SocialMediaData(socialMediaLink.text.toString())
-            socialMediaLink.setText("")
+            socialMediaLink.text = ""
             socialMediaList.add(socialMediaData)
-            Toast.makeText(this, "Account Added", Toast.LENGTH_SHORT).show()
-
-
+            val toast = Toast.makeText(this, "Account Added", Toast.LENGTH_SHORT)
+            toast.setGravity(Gravity.TOP, 0, 0)
+            toast.show()
         }
 
 
     }
 
-
-    private fun configureImageButton() {
+    private fun configureSelectImageButton() {
         val selectImageButton = findViewById<Button>(R.id.userRegisterUploadImageButton)
-
         selectImageButton.setOnClickListener {
-
-            selectImage()
-
+            val intent = Intent()
+            intent.type = "image/*"
+            intent.action = Intent.ACTION_GET_CONTENT
+            startActivityForResult(intent, 100)
         }
-
-
-    }
-
-    private fun selectImage() {
-
-
-        val intent = Intent();
-        intent.setType("image/*")
-        intent.setAction(Intent.ACTION_GET_CONTENT)
-        startActivityForResult(intent, 100)
-
     }
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
         if (requestCode == 100 && data != null && data.data != null) {
-
             imageUri = data.data
             val imageView = findViewById<ImageView>(R.id.userRegisterUploadImageView)
-
             imageView.setImageURI(imageUri)
         }
     }
 
-
     private fun configureRegisterButton() {
         val userRegisterButton = findViewById<Button>(R.id.userRegisterButtonUser)
-
         userRegisterButton.setOnClickListener {
-
             saveSocialMediaData()
             saveUserData()
-
-
         }
-
     }
-
 
     private fun saveSocialMediaData() {
         val phoneNumber = findViewById<TextView>(R.id.userRegisterTextPhone).text.toString()
-
         val database =
             FirebaseDatabase.getInstance("https://vertiefungfhws-default-rtdb.europe-west1.firebasedatabase.app")
                 .getReference("Data/SocialMedia")
-
         database.child(phoneNumber).setValue(socialMediaList).addOnSuccessListener {
-            println("yes")
+            Toast.makeText(this, "SocialMedia Accounts Added", Toast.LENGTH_SHORT).show()
         }
-            .addOnFailureListener { println("no") }
-
-
+            .addOnFailureListener {
+                Toast.makeText(this, "Can´t Access DataBase", Toast.LENGTH_SHORT).show()
+            }
     }
-
 
     private fun saveUserData() {
         val firstName = findViewById<TextView>(R.id.userRegisterTextPersonFirstName).text.toString()
@@ -129,8 +101,8 @@ class UserRegister : AppCompatActivity() {
             .getReference(phoneNumber)
 
         imageUri?.let { image ->
-            storage.putFile(image).addOnSuccessListener { println("worked") }
-                .addOnFailureListener { "dont" }
+            storage.putFile(image).addOnSuccessListener { }
+                .addOnFailureListener { }
         }
 
 
@@ -144,16 +116,12 @@ class UserRegister : AppCompatActivity() {
                 putString("PHONE_NUMBER", phoneNumber)
                 putString("EMAIL", email)
                 putString("DESCRIPTION", description)
-
             }.apply()
-
-
             val intent = Intent(this, MainActivity::class.java)
             startActivity(intent)
         }.addOnFailureListener {
-            Toast.makeText(this, "Not ok", Toast.LENGTH_LONG).show()
+            Toast.makeText(this, "Can´t Access DataBase", Toast.LENGTH_SHORT).show()
         }
-
 
     }
 

@@ -10,16 +10,14 @@ import androidx.recyclerview.widget.RecyclerView
 class SocialMediaRecyclerAdapter(private val socialMediaData: ArrayList<SocialMediaData>) :
     RecyclerView.Adapter<SocialMediaRecyclerAdapter.MyViewHolder>() {
 
-    private lateinit var userListener: OnUserClickListener;
+    private lateinit var userListener: OnUserClickListener
 
     interface OnUserClickListener {
         fun onUserClick(position: Int)
-
-
     }
 
     fun setOnUserClickListener(listener: OnUserClickListener) {
-        userListener = listener;
+        userListener = listener
     }
 
 
@@ -34,24 +32,19 @@ class SocialMediaRecyclerAdapter(private val socialMediaData: ArrayList<SocialMe
     }
 
     override fun onBindViewHolder(holder: MyViewHolder, position: Int) {
-
         val socialAccount = socialMediaData[position]
         holder.socialMediaLink.text = socialAccount.socialMediaAccountLink
-
 
     }
 
     override fun getItemCount(): Int {
-
         return socialMediaData.size
     }
 
 
     class MyViewHolder(itemView: View, listener: OnUserClickListener) :
         RecyclerView.ViewHolder(itemView) {
-
         val socialMediaLink: TextView = itemView.findViewById(R.id.userCardViewNameView)
-
 
         init {
             itemView.setOnClickListener {
@@ -59,9 +52,6 @@ class SocialMediaRecyclerAdapter(private val socialMediaData: ArrayList<SocialMe
                 listener.onUserClick(adapterPosition);
             }
         }
-
-
     }
-
 
 }

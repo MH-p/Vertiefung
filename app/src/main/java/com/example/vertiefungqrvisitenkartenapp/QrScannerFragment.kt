@@ -27,17 +27,14 @@ class QrScannerFragment : Fragment() {
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
-        savedInstanceState: Bundle?): View? {
-        // Inflate the layout for this fragment
+        savedInstanceState: Bundle?
+    ): View? {
         val view = inflater.inflate(R.layout.fragment_qr_scanner, container, false)
-
         startQrCodeScanner(view)
-
         return view
     }
 
-
-    private fun startQrCodeScanner(view:View) {
+    private fun startQrCodeScanner(view: View) {
         if (ContextCompat.checkSelfPermission(
                 requireContext(),
                 android.Manifest.permission.CAMERA
@@ -50,35 +47,30 @@ class QrScannerFragment : Fragment() {
             )
         } else {
             startScanning(view)
-            loadAndSaveScannedUser("55")
         }
     }
-
 
 
     private fun startScanning(view: View) {
 
         val scannerView = view.findViewById<CodeScannerView>(R.id.scanner_view)
         codeScanner = CodeScanner(requireContext(), scannerView)
-        // Parameters (default values)
-        codeScanner.camera = CodeScanner.CAMERA_BACK // or CAMERA_FRONT or specific camera id
-        codeScanner.formats = CodeScanner.ALL_FORMATS // list of type BarcodeFormat,
-        // ex. listOf(BarcodeFormat.QR_CODE)
-        codeScanner.autoFocusMode = AutoFocusMode.SAFE // or CONTINUOUS
-        codeScanner.scanMode = ScanMode.SINGLE // or CONTINUOUS or PREVIEW
-        codeScanner.isAutoFocusEnabled = true // Whether to enable auto focus or not
-        codeScanner.isFlashEnabled = false // Whether to enable flash or not
 
-        // Callbacks
+        codeScanner.camera = CodeScanner.CAMERA_BACK
+        codeScanner.formats = CodeScanner.ALL_FORMATS
+
+        codeScanner.autoFocusMode = AutoFocusMode.SAFE
+        codeScanner.scanMode = ScanMode.SINGLE
+        codeScanner.isAutoFocusEnabled = true
+        codeScanner.isFlashEnabled = false
+
+
         codeScanner.decodeCallback = DecodeCallback {
             runOnUiThread {
-
-                
-//                view.Toast.makeText(this, "Scan result: ${it.text}", Toast.LENGTH_LONG).show()
-
+                loadAndSaveScannedUser(it.text)
             }
         }
-        codeScanner.errorCallback = ErrorCallback { // or ErrorCallback.SUPPRESS
+        codeScanner.errorCallback = ErrorCallback {
             runOnUiThread {
                 Toast.makeText(
                     requireContext(), "Camera initialization error: ${it.message}",
@@ -132,21 +124,20 @@ class QrScannerFragment : Fragment() {
         val sharedPreferences =
             requireActivity().getSharedPreferences("sharedPrefs", Context.MODE_PRIVATE)
         val savedPhoneNumber = sharedPreferences.getString("PHONE_NUMBER", null)
-//todo zuerst eigene tel dann gescante tel
+
         user.phoneNumber?.let {
             if (savedPhoneNumber != null) {
                 database.child(savedPhoneNumber).child(it).setValue(user).addOnSuccessListener {
-                        Toast.makeText(requireContext(), "Friend Added!", Toast.LENGTH_LONG).show()
+                    Toast.makeText(requireContext(), "Friend Added!", Toast.LENGTH_LONG).show()
 
                 }.addOnFailureListener {
-                        Toast.makeText(requireContext(), "Not ok", Toast.LENGTH_LONG).show()
+                    Toast.makeText(requireContext(), "DataBase Error", Toast.LENGTH_LONG).show()
                 }
             }
         }
 
 
     }
-
 
     override fun onResume() {
         super.onResume()
@@ -157,8 +148,6 @@ class QrScannerFragment : Fragment() {
         codeScanner.releaseResources()
         super.onPause()
     }
-
-
 
 
 }

@@ -25,10 +25,7 @@ class QrGeneratorFragment : Fragment() {
         val sharedPreferences =
             requireActivity().getSharedPreferences("sharedPrefs", Context.MODE_PRIVATE)
         val savedPhoneNumber = sharedPreferences.getString("PHONE_NUMBER", null)
-
-
         val view = inflater.inflate(R.layout.fragment_qr_generator, container, false)
-
         val writer = QRCodeWriter()
         try {
             val bitMatrix = writer.encode(savedPhoneNumber, BarcodeFormat.QR_CODE, 512, 512)
@@ -46,7 +43,6 @@ class QrGeneratorFragment : Fragment() {
         }
 
         return view
-
 
     }
 

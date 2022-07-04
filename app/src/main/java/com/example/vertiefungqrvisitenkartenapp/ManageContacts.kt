@@ -13,7 +13,6 @@ class ManageContacts : AppCompatActivity() {
 
     }
 
-
     private fun setUpTabBar() {
         val tabLayout = findViewById<TabLayout>(R.id.manageContactsTabLayout)
         val viewPager = findViewById<ViewPager2>(R.id.contentViewPager)

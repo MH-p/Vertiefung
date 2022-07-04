@@ -10,7 +10,7 @@
         android:id="@+id/qrCodeView"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:contentDescription="TODO"
+        android:contentDescription="@string/qrcode"
         tools:ignore="ImageContrastCheck"
         tools:src="@tools:sample/avatars" />
 </FrameLayout>
