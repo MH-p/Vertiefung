@@ -66,12 +66,12 @@ class QrScannerFragment : Fragment() {
 
 
         codeScanner.decodeCallback = DecodeCallback {
-            runOnUiThread {
+            requireActivity().runOnUiThread {
                 loadAndSaveScannedUser(it.text)
             }
         }
         codeScanner.errorCallback = ErrorCallback {
-            runOnUiThread {
+            requireActivity().runOnUiThread {
                 Toast.makeText(
                     requireContext(), "Camera initialization error: ${it.message}",
                     Toast.LENGTH_LONG
@@ -83,13 +83,7 @@ class QrScannerFragment : Fragment() {
             codeScanner.startPreview()
         }
 
-
     }
-
-    private fun runOnUiThread(any: Any) {
-
-    }
-
 
     private fun loadAndSaveScannedUser(phoneNumberOfScannedUser: String) {
 

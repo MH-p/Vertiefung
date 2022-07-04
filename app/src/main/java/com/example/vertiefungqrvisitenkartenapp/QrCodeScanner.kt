@@ -60,7 +60,7 @@ package com.example.vertiefungqrvisitenkartenapp
 //            )
 //        } else {
 //            startScanning()
-//            loadAndSaveScannedUser("55")
+//
 //        }
 //    }
 //

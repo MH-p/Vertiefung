@@ -28,6 +28,7 @@ class MainActivity : AppCompatActivity() {
         userRecyclerview.setHasFixedSize(true)
         userArrayList = arrayListOf()
 
+
         configureButtons()
         configureRecyclerView()
 
@@ -43,7 +44,7 @@ class MainActivity : AppCompatActivity() {
         database.addValueEventListener(object : ValueEventListener {
 
             override fun onDataChange(snapshot: DataSnapshot) {
-
+                userArrayList.clear()
                 if (snapshot.exists()) {
 
                     for (userSnapshot in snapshot.children) {
@@ -53,6 +54,7 @@ class MainActivity : AppCompatActivity() {
                     }
                     val adapter = UserRecyclerViewAdapter(userArrayList)
                     userRecyclerview.adapter = adapter
+
 
 
                     adapter.setOnUserClickListener(object :
@@ -73,7 +75,6 @@ class MainActivity : AppCompatActivity() {
 
     }
 
-
     private fun configureButtons() {
         val gotToManageContactsButton = findViewById<FloatingActionButton>(R.id.floatingActionButton)
         gotToManageContactsButton.setOnClickListener {
@@ -82,28 +83,20 @@ class MainActivity : AppCompatActivity() {
         }
     }
 
-
-
     private fun checkIfUserIsAlreadyRegistered() {
         val sharedPreferences = getSharedPreferences("sharedPrefs", Context.MODE_PRIVATE)
         val savedPhoneNumber = sharedPreferences.getString("PHONE_NUMBER", null)
-
         if (savedPhoneNumber.isNullOrBlank()) {
             val intent = Intent(this, UserRegister::class.java)
             startActivity(intent)
         } else {
             phoneNumber=savedPhoneNumber
         }
-
-
     }
-
-
     override fun onBackPressed() {
         super.onBackPressed()
         finish()
     }
-
 
 }
 
