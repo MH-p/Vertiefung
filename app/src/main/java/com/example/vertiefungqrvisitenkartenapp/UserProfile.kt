@@ -2,14 +2,11 @@ package com.example.vertiefungqrvisitenkartenapp
 
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import android.widget.ImageView
-import android.widget.Toast
-import androidx.core.content.ContextCompat
-import com.budiyev.android.codescanner.CodeScanner
+import android.widget.TextView
 
 class UserProfile : AppCompatActivity() {
-    private var userImageInt: Int = 0
-    private var userName :String=""
+    private var user:UserData? = null
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_user_profile)
@@ -25,22 +22,32 @@ class UserProfile : AppCompatActivity() {
     }
 
     private fun getData() {
-        if (intent.hasExtra("userName")) {
-//            userImageInt = intent.getIntExtra("userImage", 1)
-userName= intent.getStringExtra("userName").toString()
 
-        } else {
 
-            Toast.makeText(this, "Please Try Later Again", Toast.LENGTH_LONG).show()
-
+        intent?.let {
+            user= intent.extras?.getParcelable<UserData>("user")
         }
+
 
     }
 
     private fun setData() {
 //        val userImage = findViewById<ImageView>(R.id.userProfileImage);
 //        userImage.setImageResource(userImageInt);
-//val
+
+
+        val fullUserName = user?.userFirstName +" "+ user?.userLastName
+
+        val userProfileName=findViewById<TextView>(R.id.userProfileNameView)
+        userProfileName.text = fullUserName
+
+        val userDescription=findViewById<TextView>(R.id.userProfileDescriptionView)
+        userDescription.text = user?.description ?: "can't fetch Data!"
+
+        val userPhoneNumber=findViewById<TextView>(R.id.userProfilePhoneNumberView)
+        userPhoneNumber.text = user?.phoneNumber ?: "can't fetch Data!"
+
+
 
 
     }

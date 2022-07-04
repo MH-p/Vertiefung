@@ -2,22 +2,70 @@ package com.example.vertiefungqrvisitenkartenapp
 
 import android.content.Context
 import android.content.Intent
+import android.net.Uri
 import android.os.Bundle
 import android.widget.Button
+import android.widget.ImageView
 import android.widget.TextView
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import com.google.firebase.database.FirebaseDatabase
+import com.google.firebase.storage.FirebaseStorage
+import java.io.ByteArrayOutputStream
 
 class UserRegister : AppCompatActivity() {
-
-//    private lateinit var database: DatabaseReference
+    private var imageUri: Uri? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_user_register)
+        configureButtons()
 
 
+    }
+
+    private fun configureButtons() {
+        configureRegisterButton()
+        configureImageButton()
+
+    }
+
+    private fun configureImageButton() {
+        val selectImageButton = findViewById<Button>(R.id.userRegisterUploadImageButton)
+
+        selectImageButton.setOnClickListener {
+
+            selectImage()
+
+
+        }
+
+
+    }
+
+    private fun selectImage() {
+
+
+        val intent = Intent();
+        intent.setType("image/*")
+        intent.setAction(Intent.ACTION_GET_CONTENT)
+        startActivityForResult(intent, 100)
+
+    }
+
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        super.onActivityResult(requestCode, resultCode, data)
+        if (requestCode == 100 && data != null && data.data != null) {
+
+            imageUri = data.data
+            val imageView = findViewById<ImageView>(R.id.registerUploadImageView)
+
+            imageView.setImageURI(imageUri)
+        }
+    }
+
+
+    private fun configureRegisterButton() {
         val userRegisterButton = findViewById<Button>(R.id.registerButtonUser)
 
         userRegisterButton.setOnClickListener {
@@ -31,12 +79,20 @@ class UserRegister : AppCompatActivity() {
                 FirebaseDatabase.getInstance("https://vertiefungfhws-default-rtdb.europe-west1.firebasedatabase.app")
                     .getReference("Data/Users")
 
-//            val users: MutableMap<String, UserData> = HashMap()
-//            users["23"] = UserData("yto", "Alan Turing","1232312","wdsadas","3231231231")
-//val user1=UserData("sdasdsa","dsdadsa","21313123","3213231","231231231")
-//            users["21312321"] = user1
-//
-//            database.updateChildren(users as Map<String, Any>)
+            val storage = FirebaseStorage.getInstance("gs://vertiefungfhws.appspot.com")
+                .getReference(phoneNumber)
+
+
+
+
+
+
+
+
+            imageUri?.let { image ->
+                storage.putFile(image).addOnSuccessListener { println("worked") }
+                    .addOnFailureListener { "dont" }
+            }
 
 
             val user = UserData(firstName, lastName, phoneNumber, email, description)
@@ -50,8 +106,8 @@ class UserRegister : AppCompatActivity() {
                     putString("EMAIL", email)
                     putString("DESCRIPTION", description)
 
-
                 }.apply()
+
 
                 val intent = Intent(this, MainActivity::class.java)
                 startActivity(intent)
@@ -62,6 +118,7 @@ class UserRegister : AppCompatActivity() {
 
         }
 
-
     }
+
+
 }

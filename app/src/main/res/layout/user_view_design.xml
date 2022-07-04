@@ -14,7 +14,7 @@
         android:layout_height="match_parent">
 
         <TextView
-            android:id="@+id/emailView"
+            android:id="@+id/userCardViewEmailView"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginEnd="32dp"
@@ -23,26 +23,26 @@
             android:textStyle="bold"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="@+id/phoneNumberView"
-            app:layout_constraintTop_toBottomOf="@+id/nameView"
+            app:layout_constraintStart_toStartOf="@+id/userCardViewPhoneNumberView"
+            app:layout_constraintTop_toBottomOf="@+id/userCardViewNameView"
             app:layout_constraintVertical_bias="0.0" />
 
         <TextView
-            android:id="@+id/nameView"
+            android:id="@+id/userCardViewNameView"
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:layout_height="33dp"
             android:layout_marginTop="16dp"
-            android:layout_marginEnd="41dp"
+            android:layout_marginEnd="32dp"
             android:text="Item"
             android:textSize="20sp"
             android:textStyle="bold"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="1.0"
-            app:layout_constraintStart_toStartOf="@+id/emailView"
+            app:layout_constraintStart_toStartOf="@+id/userCardViewEmailView"
             app:layout_constraintTop_toTopOf="parent" />
 
         <ImageView
-            android:id="@+id/userPictureView"
+            android:id="@+id/userCardViewUserPictureView"
             android:layout_width="99dp"
             android:layout_height="88dp"
             android:layout_marginTop="5dp"
@@ -56,7 +56,7 @@
             app:layout_constraintVertical_bias="0.0" />
 
         <TextView
-            android:id="@+id/phoneNumberView"
+            android:id="@+id/userCardViewPhoneNumberView"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="TextView"
@@ -64,7 +64,7 @@
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="0.915"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/emailView"
+            app:layout_constraintTop_toBottomOf="@+id/userCardViewEmailView"
             app:layout_constraintVertical_bias="0.272" />
     </androidx.constraintlayout.widget.ConstraintLayout>
 

@@ -59,7 +59,7 @@
         tools:srcCompat="@tools:sample/avatars" />
 
     <TextView
-        android:id="@+id/textView5"
+        android:id="@+id/userProfileNameView"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="John Doe"
@@ -71,18 +71,18 @@
         app:layout_constraintVertical_bias="0.116" />
 
     <TextView
-        android:id="@+id/textView6"
+        android:id="@+id/userProfileDescriptionView"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="Boss Of Bosses"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/textView5"
+        app:layout_constraintTop_toBottomOf="@+id/userProfileNameView"
         app:layout_constraintVertical_bias="0.049" />
 
     <TextView
-        android:id="@+id/textView4"
+        android:id="@+id/userProfilePhoneNumberView"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="Phone: 0174 345678"
@@ -90,7 +90,7 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.498"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/textView6"
+        app:layout_constraintTop_toBottomOf="@+id/userProfileDescriptionView"
         app:layout_constraintVertical_bias="0.087" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

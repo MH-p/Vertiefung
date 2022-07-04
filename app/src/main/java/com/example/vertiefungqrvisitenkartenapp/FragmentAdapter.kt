@@ -12,7 +12,7 @@ class FragmentAdapter(activity: FragmentActivity, private val tabCount: Int) :
 
         return when (position) {
             0 -> QrScannerFragment()
-            1 -> QrGeneratorFragment()
+//            1 -> QrGeneratorFragment()
             else -> QrScannerFragment()
         }
     }

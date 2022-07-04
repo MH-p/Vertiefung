@@ -1,7 +1,10 @@
 package com.example.vertiefungqrvisitenkartenapp
 
+import android.app.ProgressDialog
 import android.content.Context
 import android.content.Intent
+import android.graphics.Bitmap
+import android.graphics.BitmapFactory
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -11,6 +14,8 @@ import com.google.firebase.database.DataSnapshot
 import com.google.firebase.database.DatabaseError
 import com.google.firebase.database.FirebaseDatabase
 import com.google.firebase.database.ValueEventListener
+import com.google.firebase.storage.FirebaseStorage
+import java.io.File
 
 
 class MainActivity : AppCompatActivity() {
@@ -50,11 +55,17 @@ class MainActivity : AppCompatActivity() {
 
                     for (userSnapshot in snapshot.children) {
 
-                        val user = userSnapshot . getValue (UserData::class.java)
+                        val user = userSnapshot.getValue(UserData::class.java)
+
+
                         userArrayList.add(user!!)
 
                     }
 
+//getProfilePictures(userArrayList)
+
+
+                 val img=  getProfilePictures("112")
 
                     val adapter = RecyclerViewAdapter(userArrayList)
                     userRecyclerview.adapter = adapter
@@ -65,9 +76,9 @@ class MainActivity : AppCompatActivity() {
                     adapter.setOnUserClickListener(object :
                         RecyclerViewAdapter.OnUserClickListener {
                         override fun onUserClick(position: Int) {
-println(userArrayList.get(position).userFirstName)
 
-                            intent.putExtra("userName","wwww")
+
+                            intent.putExtra("user", userArrayList[position])
                             startActivity(intent)
 
                         }
@@ -87,6 +98,45 @@ println(userArrayList.get(position).userFirstName)
 
     }
 
+
+    private fun getProfilePictures(phoneNumber:String): Bitmap? {
+        val progressDialog = ProgressDialog(this)
+        progressDialog.setCancelable(false)
+        progressDialog.show()
+
+
+
+
+
+        val storage = FirebaseStorage.getInstance("gs://vertiefungfhws.appspot.com/")
+            .getReference(phoneNumber)
+
+
+        val localFile = File.createTempFile(phoneNumber, "jpg")
+        var profileImage: Bitmap? = null
+
+
+        storage.getFile(localFile).addOnSuccessListener {
+
+
+            if (progressDialog.isShowing){
+                progressDialog.dismiss()
+            }
+
+            profileImage = BitmapFactory.decodeFile(localFile.absolutePath)
+
+        }.addOnFailureListener {
+            if (progressDialog.isShowing){
+                progressDialog.dismiss()
+            }
+            println("why")
+
+        }
+
+        return profileImage
+    }
+
+
     private fun configureButtons() {
         configureGoToScanner()
     }
@@ -94,7 +144,7 @@ println(userArrayList.get(position).userFirstName)
     private fun configureGoToScanner() {
         val gotToScannerButton = findViewById<FloatingActionButton>(R.id.floatingActionButton)
         gotToScannerButton.setOnClickListener {
-            val intent = Intent(this, QrCodeScanner::class.java)
+            val intent = Intent(this, QRCodeGenerator::class.java)
             startActivity(intent)
         }
     }
@@ -104,7 +154,7 @@ println(userArrayList.get(position).userFirstName)
         val sharedPreferences = getSharedPreferences("sharedPrefs", Context.MODE_PRIVATE)
         val savedFirstName = sharedPreferences.getString("FIRST_NAME", null)
         val savedLastName = sharedPreferences.getString("LAST_NAME", null)
-        val savedPhoneNumber = sharedPreferences.getString("PHONE_NUMBER", null)
+        val savedPhoneNumber = null
         val savedEmail = sharedPreferences.getString("EMAIL", null)
         val savedDescription = sharedPreferences.getString("DESCRIPTION", null)
 

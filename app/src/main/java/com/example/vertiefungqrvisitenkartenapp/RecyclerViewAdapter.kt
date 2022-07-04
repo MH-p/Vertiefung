@@ -5,7 +5,6 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.TextView
-import androidx.cardview.widget.CardView
 import androidx.recyclerview.widget.RecyclerView
 
 
@@ -37,11 +36,15 @@ class RecyclerViewAdapter(private val userList: ArrayList<UserData>) :
 
     override fun onBindViewHolder(holder: MyViewHolder, position: Int) {
 
-        val currentitem = userList[position]
+        val currentUser = userList[position]
+        val fullUserName = currentUser.userFirstName +" "+ currentUser.userLastName
 
-        holder.firstName.text = currentitem.userFirstName
-//        holder.lastName.text = currentitem.userLastName
-        holder.email.text = currentitem.email
+
+        holder.userName.text = fullUserName
+        holder.email.text = currentUser.email
+        holder.phoneNumber.text=currentUser.phoneNumber
+        holder.userProfileImage.setImageBitmap(currentUser.image)
+
 
 
     }
@@ -55,8 +58,10 @@ class RecyclerViewAdapter(private val userList: ArrayList<UserData>) :
     class MyViewHolder(itemView: View, listener: OnUserClickListener) :
         RecyclerView.ViewHolder(itemView) {
 
-        val firstName: TextView = itemView.findViewById(R.id.nameView)
-        val email: TextView = itemView.findViewById(R.id.emailView)
+        val userName: TextView = itemView.findViewById(R.id.userCardViewNameView)
+        val email: TextView = itemView.findViewById(R.id.userCardViewEmailView)
+        val phoneNumber :TextView=itemView.findViewById(R.id.userCardViewPhoneNumberView)
+        val userProfileImage:ImageView=itemView.findViewById(R.id.userCardViewUserPictureView)
 
         init {
             itemView.setOnClickListener {
