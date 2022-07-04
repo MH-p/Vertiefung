@@ -47,8 +47,8 @@
 
     <ImageView
         android:id="@+id/userProfileImage"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_width="200dp"
+        android:layout_height="200dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.498"
@@ -68,7 +68,7 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/userProfileImage"
-        app:layout_constraintVertical_bias="0.116" />
+        app:layout_constraintVertical_bias="0.054" />
 
     <TextView
         android:id="@+id/userProfileDescriptionView"
@@ -92,5 +92,15 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/userProfileDescriptionView"
         app:layout_constraintVertical_bias="0.087" />
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/socialMediaRecyclerView"
+        android:layout_width="288dp"
+        android:layout_height="156dp"
+        android:layout_marginTop="24dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/userProfilePhoneNumberView" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

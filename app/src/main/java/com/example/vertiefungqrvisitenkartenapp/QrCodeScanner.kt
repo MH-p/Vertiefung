@@ -1,6 +1,7 @@
 package com.example.vertiefungqrvisitenkartenapp
 
 //import android.content.ContentValues.TAG
+//import android.content.Intent
 //import android.content.pm.PackageManager
 //import android.os.Bundle
 //import android.util.Log
@@ -59,7 +60,7 @@ package com.example.vertiefungqrvisitenkartenapp
 //            )
 //        } else {
 //            startScanning()
-//            loadAndSaveScannedUser("1232312")
+//            loadAndSaveScannedUser("55")
 //        }
 //    }
 //
@@ -131,14 +132,17 @@ package com.example.vertiefungqrvisitenkartenapp
 //            FirebaseDatabase.getInstance("https://vertiefungfhws-default-rtdb.europe-west1.firebasedatabase.app")
 //                .getReference("Data/Contacts")
 ////todo zuerst eigene tel dann gescante tel
-//        database.child("2222").child("1223").setValue(user).addOnSuccessListener {
-//            Toast.makeText(this, "Friend Added!", Toast.LENGTH_LONG).show()
-//        }.addOnFailureListener {
-//            Toast.makeText(this, "Not ok", Toast.LENGTH_LONG).show()
+//        user.phoneNumber?.let {
+//            database.child("2222").child(it).setValue(user).addOnSuccessListener {
+//                Toast.makeText(this, "Friend Added!", Toast.LENGTH_LONG).show()
+//            }.addOnFailureListener {
+//                Toast.makeText(this, "Not ok", Toast.LENGTH_LONG).show()
+//            }
 //        }
 //
 //
 //    }
+//
 //
 //
 //    override fun onResume() {

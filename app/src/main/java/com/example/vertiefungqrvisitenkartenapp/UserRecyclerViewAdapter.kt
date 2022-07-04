@@ -1,15 +1,18 @@
 package com.example.vertiefungqrvisitenkartenapp
 
+import android.graphics.BitmapFactory
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
+import com.google.firebase.storage.FirebaseStorage
+import java.io.File
 
 
-class RecyclerViewAdapter(private val userList: ArrayList<UserData>) :
-    RecyclerView.Adapter<RecyclerViewAdapter.MyViewHolder>() {
+class UserRecyclerViewAdapter(private val userList: ArrayList<UserData>) :
+    RecyclerView.Adapter<UserRecyclerViewAdapter.MyViewHolder>() {
 
     private lateinit var userListener: OnUserClickListener;
 
@@ -36,6 +39,7 @@ class RecyclerViewAdapter(private val userList: ArrayList<UserData>) :
 
     override fun onBindViewHolder(holder: MyViewHolder, position: Int) {
 
+
         val currentUser = userList[position]
         val fullUserName = currentUser.userFirstName +" "+ currentUser.userLastName
 
@@ -43,7 +47,29 @@ class RecyclerViewAdapter(private val userList: ArrayList<UserData>) :
         holder.userName.text = fullUserName
         holder.email.text = currentUser.email
         holder.phoneNumber.text=currentUser.phoneNumber
-        holder.userProfileImage.setImageBitmap(currentUser.image)
+
+        val storage = currentUser.phoneNumber?.let {
+            FirebaseStorage.getInstance("gs://vertiefungfhws.appspot.com/")
+                .getReference(it)
+        }
+
+
+        val localFile = File.createTempFile("temp", "jpg")
+
+
+        storage?.getFile(localFile)?.addOnSuccessListener {
+
+
+            val profileImage = BitmapFactory.decodeFile(localFile.absolutePath)
+            holder.userProfileImage.setImageBitmap(profileImage)
+
+        }?.addOnFailureListener {
+
+
+        }
+
+
+
 
 
 
@@ -53,6 +79,7 @@ class RecyclerViewAdapter(private val userList: ArrayList<UserData>) :
 
         return userList.size
     }
+
 
 
     class MyViewHolder(itemView: View, listener: OnUserClickListener) :

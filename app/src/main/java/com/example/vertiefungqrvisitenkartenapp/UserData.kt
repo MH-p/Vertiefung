@@ -1,6 +1,5 @@
 package com.example.vertiefungqrvisitenkartenapp
 
-import android.graphics.Bitmap
 import android.os.Parcel
 import android.os.Parcelable
 
@@ -10,16 +9,13 @@ data class UserData(
     var phoneNumber: String? = "",
     val email: String? = "",
     val description: String? = "",
-    var image: Bitmap? = null
-
 ) : Parcelable {
     constructor(parcel: Parcel) : this(
         parcel.readString(),
         parcel.readString(),
         parcel.readString(),
         parcel.readString(),
-        parcel.readString(),
-        parcel.readParcelable(Bitmap::class.java.classLoader)
+        parcel.readString()
     ) {
     }
 
@@ -29,7 +25,6 @@ data class UserData(
         parcel.writeString(phoneNumber)
         parcel.writeString(email)
         parcel.writeString(description)
-        parcel.writeParcelable(image, flags)
     }
 
     override fun describeContents(): Int {
@@ -46,5 +41,7 @@ data class UserData(
         }
     }
 
-
 }
+
+
+

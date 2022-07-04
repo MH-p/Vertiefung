@@ -17,10 +17,12 @@
         android:theme="@style/Theme.Design.NoActionBar">
         <activity
             android:name=".QRCodeGenerator"
-            android:exported="false" />
+            android:exported="false"
+            android:parentActivityName=".MainActivity"/>
         <activity
             android:name=".UserRegister"
-            android:exported="false" />
+            android:exported="false"
+            android:parentActivityName=".MainActivity"/>
         <activity
             android:name=".ManageContacts"
             android:exported="false"
@@ -32,6 +34,12 @@
         <activity
             android:name=".QrCodeScanner"
             android:parentActivityName=".MainActivity" />
+        <activity
+            android:name=".FragmentAdapter"
+            android:parentActivityName=".MainActivity" />
+
+
+
         <activity
             android:name=".MainActivity"
             android:exported="true">
