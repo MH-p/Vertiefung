@@ -14,7 +14,7 @@ import com.google.zxing.WriterException
 import com.google.zxing.qrcode.QRCodeWriter
 
 
-class QrGeneratorFragment : Fragment() {
+class FragmentQrGenerator : Fragment() {
 
 
     override fun onCreateView(

@@ -22,7 +22,7 @@ import com.google.firebase.database.DatabaseError
 import com.google.firebase.database.FirebaseDatabase
 
 
-class QrScannerFragment : Fragment() {
+class FragmentQrScanner : Fragment() {
     private lateinit var codeScanner: CodeScanner
 
     override fun onCreateView(

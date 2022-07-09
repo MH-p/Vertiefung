@@ -85,7 +85,7 @@ class MainActivity : AppCompatActivity() {
 
     private fun checkIfUserIsAlreadyRegistered() {
         val sharedPreferences = getSharedPreferences("sharedPrefs", Context.MODE_PRIVATE)
-        val savedPhoneNumber = sharedPreferences.getString("PHONE_NUMBER", null)
+        val savedPhoneNumber = "+491765234698"
         if (savedPhoneNumber.isNullOrBlank()) {
             val intent = Intent(this, UserRegister::class.java)
             startActivity(intent)

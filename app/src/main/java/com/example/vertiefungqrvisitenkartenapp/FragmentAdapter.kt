@@ -11,9 +11,9 @@ class FragmentAdapter(activity: FragmentActivity, private val tabCount: Int) :
     override fun createFragment(position: Int): Fragment {
 
         return when (position) {
-            0 -> QrScannerFragment()
-            1 -> QrGeneratorFragment()
-            else -> QrScannerFragment()
+            0 -> FragmentQrScanner()
+            1 -> FragmentQrGenerator()
+            else -> FragmentQrScanner()
         }
     }
 }
