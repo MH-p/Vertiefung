@@ -29,10 +29,6 @@
             android:name=".UserProfile"
             android:exported="false"
             android:parentActivityName=".MainActivity" />
-        <activity
-            android:name=".FragmentAdapter"
-            android:parentActivityName=".MainActivity"
-            tools:ignore="Instantiatable" />
 
 
 
