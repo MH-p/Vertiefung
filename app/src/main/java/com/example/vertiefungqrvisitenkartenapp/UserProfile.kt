@@ -29,28 +29,24 @@ class UserProfile : AppCompatActivity() {
         socialMediaRecyclerview.layoutManager = LinearLayoutManager(this)
         socialMediaRecyclerview.setHasFixedSize(true)
         socialMediaArrayList = arrayListOf()
-        configureUserProfile()
+        setUpUserProfile()
     }
 
-    private fun configureUserProfile() {
+    private fun setUpUserProfile() {
         getData()
         setData()
-
     }
 
     private fun getData() {
         intent?.let {
             user = intent.extras?.getParcelable("user")
         }
-
-        val userPhoneNumber = user?.phoneNumber ?: "0"
-
+        val userPhoneNumber = user?.phoneNumber ?: ""
         val database =
             FirebaseDatabase.getInstance("https://vertiefungfhws-default-rtdb.europe-west1.firebasedatabase.app")
                 .getReference("Data/SocialMedia").child(userPhoneNumber)
 
         database.addValueEventListener(object : ValueEventListener {
-
             override fun onDataChange(snapshot: DataSnapshot) {
                 if (snapshot.exists()) {
                     for (userSnapshot in snapshot.children) {
@@ -65,14 +61,13 @@ class UserProfile : AppCompatActivity() {
                         SocialMediaRecyclerAdapter.OnUserClickListener {
                         override fun onUserClick(position: Int) {
                             val browserIntent =
-                                Intent(Intent.ACTION_VIEW, Uri.parse("http://www.google.com"))
+                                Intent(Intent.ACTION_VIEW, Uri.parse(socialMediaArrayList[position].socialMediaAccountLink))
                             startActivity(browserIntent) }
                     })
                 }
             }
             override fun onCancelled(error: DatabaseError) {
             }
-
         })
 
 

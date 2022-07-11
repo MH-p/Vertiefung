@@ -11,6 +11,7 @@ import com.google.firebase.database.DataSnapshot
 import com.google.firebase.database.DatabaseError
 import com.google.firebase.database.FirebaseDatabase
 import com.google.firebase.database.ValueEventListener
+import java.lang.IllegalStateException
 
 
 class MainActivity : AppCompatActivity() {
@@ -27,15 +28,11 @@ class MainActivity : AppCompatActivity() {
         userRecyclerview.layoutManager = LinearLayoutManager(this)
         userRecyclerview.setHasFixedSize(true)
         userArrayList = arrayListOf()
-
-
-        configureButtons()
-        configureRecyclerView()
-
+        setUpButton()
     }
 
 
-    private fun configureRecyclerView() {
+    private fun setUpRecyclerView() {
         val database =
             FirebaseDatabase.getInstance("https://vertiefungfhws-default-rtdb.europe-west1.firebasedatabase.app")
                 .getReference("Data/Contacts").child(phoneNumber)
@@ -50,12 +47,9 @@ class MainActivity : AppCompatActivity() {
                     for (userSnapshot in snapshot.children) {
                         val user = userSnapshot.getValue(UserData::class.java)
                         userArrayList.add(user!!)
-
                     }
                     val adapter = UserRecyclerViewAdapter(userArrayList)
                     userRecyclerview.adapter = adapter
-
-
 
                     adapter.setOnUserClickListener(object :
                         UserRecyclerViewAdapter.OnUserClickListener {
@@ -63,19 +57,16 @@ class MainActivity : AppCompatActivity() {
                             intent.putExtra("user", userArrayList[position])
                             startActivity(intent)
                         }
-
                     })
-
                 }
             }
-
             override fun onCancelled(error: DatabaseError) {
+                throw IllegalStateException("Can´t load Data!")
             }
         })
-
     }
 
-    private fun configureButtons() {
+    private fun setUpButton() {
         val gotToManageContactsButton = findViewById<FloatingActionButton>(R.id.floatingActionButton)
         gotToManageContactsButton.setOnClickListener {
             val intent = Intent(this, ManageContacts::class.java)
@@ -86,18 +77,19 @@ class MainActivity : AppCompatActivity() {
     private fun checkIfUserIsAlreadyRegistered() {
         val sharedPreferences = getSharedPreferences("sharedPrefs", Context.MODE_PRIVATE)
         val savedPhoneNumber = "+491765234698"
+//        val savedPhoneNumber = sharedPreferences.getString("PHONE_NUMBER", null)
         if (savedPhoneNumber.isNullOrBlank()) {
             val intent = Intent(this, UserRegister::class.java)
             startActivity(intent)
         } else {
             phoneNumber=savedPhoneNumber
+            setUpRecyclerView()
         }
     }
     override fun onBackPressed() {
         super.onBackPressed()
         finish()
     }
-
 }
 
 

@@ -24,6 +24,8 @@ import com.google.firebase.database.FirebaseDatabase
 
 class FragmentQrScanner : Fragment() {
     private lateinit var codeScanner: CodeScanner
+    private val dataBaseInstance =
+        FirebaseDatabase.getInstance("https://vertiefungfhws-default-rtdb.europe-west1.firebasedatabase.app")
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -50,21 +52,15 @@ class FragmentQrScanner : Fragment() {
         }
     }
 
-
     private fun startScanning(view: View) {
-
         val scannerView = view.findViewById<CodeScannerView>(R.id.scanner_view)
         codeScanner = CodeScanner(requireContext(), scannerView)
-
         codeScanner.camera = CodeScanner.CAMERA_BACK
         codeScanner.formats = CodeScanner.ALL_FORMATS
-
         codeScanner.autoFocusMode = AutoFocusMode.SAFE
         codeScanner.scanMode = ScanMode.SINGLE
         codeScanner.isAutoFocusEnabled = true
         codeScanner.isFlashEnabled = false
-
-
         codeScanner.decodeCallback = DecodeCallback {
             requireActivity().runOnUiThread {
                 loadAndSaveScannedUser(it.text)
@@ -78,50 +74,36 @@ class FragmentQrScanner : Fragment() {
                 ).show()
             }
         }
-
         scannerView.setOnClickListener {
             codeScanner.startPreview()
         }
-
     }
 
     private fun loadAndSaveScannedUser(phoneNumberOfScannedUser: String) {
-
-        val database =
-            FirebaseDatabase.getInstance("https://vertiefungfhws-default-rtdb.europe-west1.firebasedatabase.app")
-                .getReference("Data/Users")
-
-        database.addChildEventListener(object : ChildEventListener {
+        dataBaseInstance.getReference("Data/Users") .addChildEventListener(
+            object : ChildEventListener {
             override fun onChildAdded(dataSnapshot: DataSnapshot, prevChildKey: String?) {
                 val user: UserData? = dataSnapshot.getValue(UserData::class.java)
                 if (user != null && user.phoneNumber == phoneNumberOfScannedUser) {
                     saveScannedUser(user)
                 }
-
             }
-
             override fun onChildChanged(dataSnapshot: DataSnapshot, prevChildKey: String?) {}
             override fun onChildRemoved(dataSnapshot: DataSnapshot) {}
             override fun onChildMoved(dataSnapshot: DataSnapshot, prevChildKey: String?) {}
             override fun onCancelled(databaseError: DatabaseError) {}
         })
-
-
     }
 
-
     fun saveScannedUser(user: UserData) {
-
-        val database =
-            FirebaseDatabase.getInstance("https://vertiefungfhws-default-rtdb.europe-west1.firebasedatabase.app")
-                .getReference("Data/Contacts")
         val sharedPreferences =
             requireActivity().getSharedPreferences("sharedPrefs", Context.MODE_PRIVATE)
         val savedPhoneNumber = sharedPreferences.getString("PHONE_NUMBER", null)
 
         user.phoneNumber?.let {
             if (savedPhoneNumber != null) {
-                database.child(savedPhoneNumber).child(it).setValue(user).addOnSuccessListener {
+                dataBaseInstance .getReference("Data/Contacts")
+                .child(savedPhoneNumber).child(it).setValue(user).addOnSuccessListener {
                     Toast.makeText(requireContext(), "Friend Added!", Toast.LENGTH_LONG).show()
 
                 }.addOnFailureListener {
@@ -129,8 +111,6 @@ class FragmentQrScanner : Fragment() {
                 }
             }
         }
-
-
     }
 
     override fun onResume() {
@@ -139,10 +119,7 @@ class FragmentQrScanner : Fragment() {
     }
 
     override fun onPause() {
-        codeScanner.releaseResources()
         super.onPause()
-
+        codeScanner.releaseResources()
     }
-
-
 }

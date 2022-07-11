@@ -10,13 +10,11 @@ class ManageContacts : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_manage_contacts)
         setUpTabBar()
-
     }
 
     private fun setUpTabBar() {
         val tabLayout = findViewById<TabLayout>(R.id.manageContactsTabLayout)
         val viewPager = findViewById<ViewPager2>(R.id.contentViewPager)
-
         val adapter = FragmentAdapter(this, tabLayout.tabCount)
         viewPager.adapter = adapter
         viewPager.registerOnPageChangeCallback(object : ViewPager2.OnPageChangeCallback() {
