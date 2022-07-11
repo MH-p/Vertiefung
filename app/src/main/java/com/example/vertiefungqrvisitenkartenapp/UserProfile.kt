@@ -61,30 +61,31 @@ class UserProfile : AppCompatActivity() {
                         SocialMediaRecyclerAdapter.OnUserClickListener {
                         override fun onUserClick(position: Int) {
                             val browserIntent =
-                                Intent(Intent.ACTION_VIEW, Uri.parse(socialMediaArrayList[position].socialMediaAccountLink))
-                            startActivity(browserIntent) }
+                                Intent(
+                                    Intent.ACTION_VIEW,
+                                    Uri.parse(socialMediaArrayList[position].socialMediaAccountLink)
+                                )
+                            startActivity(browserIntent)
+                        }
                     })
                 }
             }
+
             override fun onCancelled(error: DatabaseError) {
             }
         })
-
-
     }
 
     private fun setData() {
-
         val fullUserName = user?.userFirstName + " " + user?.userLastName
-
         val userProfileName = findViewById<TextView>(R.id.userProfileNameView)
         userProfileName.text = fullUserName
 
         val userDescription = findViewById<TextView>(R.id.userProfileDescriptionView)
-        userDescription.text = user?.description ?: "can't fetch Data!"
+        userDescription.text = user?.description
 
         val userPhoneNumber = findViewById<TextView>(R.id.userProfilePhoneNumberView)
-        userPhoneNumber.text = user?.phoneNumber ?: "can't fetch Data!"
+        userPhoneNumber.text = user?.phoneNumber
 
         val userProfileImage = findViewById<ImageView>(R.id.userProfileImage)
 
@@ -94,7 +95,6 @@ class UserProfile : AppCompatActivity() {
         }
 
         val localFile = File.createTempFile("temp", "jpg")
-
         storage?.getFile(localFile)?.addOnSuccessListener {
 
             val profileImage = BitmapFactory.decodeFile(localFile.absolutePath)
@@ -103,10 +103,7 @@ class UserProfile : AppCompatActivity() {
         }?.addOnFailureListener {
             Toast.makeText(this, "Could Not Fetch Image!", Toast.LENGTH_SHORT).show()
         }
-
-
     }
-
 }
 
 

@@ -15,6 +15,8 @@ import com.google.firebase.storage.FirebaseStorage
 
 class UserRegister : AppCompatActivity() {
     private var imageUri: Uri? = null
+    private var dataBaseInstance =
+        FirebaseDatabase.getInstance("https://vertiefungfhws-default-rtdb.europe-west1.firebasedatabase.app")
     private lateinit var socialMediaList: ArrayList<SocialMediaData>
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -56,6 +58,7 @@ class UserRegister : AppCompatActivity() {
         }
     }
 
+
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
         if (requestCode == 100 && data != null && data.data != null) {
@@ -75,12 +78,11 @@ class UserRegister : AppCompatActivity() {
 
     private fun saveSocialMediaData() {
         val phoneNumber = findViewById<TextView>(R.id.userRegisterTextPhone).text.toString()
-        val database =
-            FirebaseDatabase.getInstance("https://vertiefungfhws-default-rtdb.europe-west1.firebasedatabase.app")
-                .getReference("Data/SocialMedia")
-        database.child(phoneNumber).setValue(socialMediaList).addOnSuccessListener {
-            Toast.makeText(this, "SocialMedia Accounts Added", Toast.LENGTH_SHORT).show()
-        }
+        dataBaseInstance.getReference("Data/SocialMedia").child(phoneNumber)
+            .setValue(socialMediaList)
+            .addOnSuccessListener {
+                Toast.makeText(this, "SocialMedia Accounts Added", Toast.LENGTH_SHORT).show()
+            }
             .addOnFailureListener {
                 Toast.makeText(this, "Can´t Access DataBase", Toast.LENGTH_SHORT).show()
             }
@@ -93,10 +95,6 @@ class UserRegister : AppCompatActivity() {
         val email = findViewById<TextView>(R.id.userRegisterTextEmailAddress).text.toString()
         val description = findViewById<TextView>(R.id.userRegisterTextDescription).text.toString()
 
-        val database =
-            FirebaseDatabase.getInstance("https://vertiefungfhws-default-rtdb.europe-west1.firebasedatabase.app")
-                .getReference("Data/Users")
-
         val storage = FirebaseStorage.getInstance("gs://vertiefungfhws.appspot.com")
             .getReference(phoneNumber)
 
@@ -105,24 +103,22 @@ class UserRegister : AppCompatActivity() {
                 .addOnFailureListener { }
         }
 
-
         val user = UserData(firstName, lastName, phoneNumber, email, description)
-        database.child(phoneNumber).setValue(user).addOnSuccessListener {
-            val sharedPreferences = getSharedPreferences("sharedPrefs", Context.MODE_PRIVATE)
-            val editor = sharedPreferences.edit()
-            editor.apply {
-                putString("FIRST_NAME", firstName)
-                putString("LAST_NAME", lastName)
-                putString("PHONE_NUMBER", phoneNumber)
-                putString("EMAIL", email)
-                putString("DESCRIPTION", description)
-            }.apply()
-            val intent = Intent(this, MainActivity::class.java)
-            startActivity(intent)
-        }.addOnFailureListener {
+        dataBaseInstance.getReference("Data/Users").child(phoneNumber).setValue(user)
+            .addOnSuccessListener {
+                val sharedPreferences = getSharedPreferences("sharedPrefs", Context.MODE_PRIVATE)
+                val editor = sharedPreferences.edit()
+                editor.apply {
+                    putString("FIRST_NAME", firstName)
+                    putString("LAST_NAME", lastName)
+                    putString("PHONE_NUMBER", phoneNumber)
+                    putString("EMAIL", email)
+                    putString("DESCRIPTION", description)
+                }.apply()
+                val intent = Intent(this, MainActivity::class.java)
+                startActivity(intent)
+            }.addOnFailureListener {
             Toast.makeText(this, "Can´t Access DataBase", Toast.LENGTH_SHORT).show()
         }
-
     }
-
 }

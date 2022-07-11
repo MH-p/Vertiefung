@@ -17,7 +17,7 @@ import java.lang.IllegalStateException
 class MainActivity : AppCompatActivity() {
     private lateinit var userArrayList: ArrayList<UserData>
     private lateinit var userRecyclerview: RecyclerView
-    private var phoneNumber:String=""
+    private var phoneNumber: String = ""
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -60,6 +60,7 @@ class MainActivity : AppCompatActivity() {
                     })
                 }
             }
+
             override fun onCancelled(error: DatabaseError) {
                 throw IllegalStateException("Can´t load Data!")
             }
@@ -67,7 +68,8 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun setUpButton() {
-        val gotToManageContactsButton = findViewById<FloatingActionButton>(R.id.floatingActionButton)
+        val gotToManageContactsButton =
+            findViewById<FloatingActionButton>(R.id.floatingActionButton)
         gotToManageContactsButton.setOnClickListener {
             val intent = Intent(this, ManageContacts::class.java)
             startActivity(intent)
@@ -82,10 +84,11 @@ class MainActivity : AppCompatActivity() {
             val intent = Intent(this, UserRegister::class.java)
             startActivity(intent)
         } else {
-            phoneNumber=savedPhoneNumber
+            phoneNumber = savedPhoneNumber
             setUpRecyclerView()
         }
     }
+
     override fun onBackPressed() {
         super.onBackPressed()
         finish()

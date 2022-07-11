@@ -80,19 +80,20 @@ class FragmentQrScanner : Fragment() {
     }
 
     private fun loadAndSaveScannedUser(phoneNumberOfScannedUser: String) {
-        dataBaseInstance.getReference("Data/Users") .addChildEventListener(
+        dataBaseInstance.getReference("Data/Users").addChildEventListener(
             object : ChildEventListener {
-            override fun onChildAdded(dataSnapshot: DataSnapshot, prevChildKey: String?) {
-                val user: UserData? = dataSnapshot.getValue(UserData::class.java)
-                if (user != null && user.phoneNumber == phoneNumberOfScannedUser) {
-                    saveScannedUser(user)
+                override fun onChildAdded(dataSnapshot: DataSnapshot, prevChildKey: String?) {
+                    val user: UserData? = dataSnapshot.getValue(UserData::class.java)
+                    if (user != null && user.phoneNumber == phoneNumberOfScannedUser) {
+                        saveScannedUser(user)
+                    }
                 }
-            }
-            override fun onChildChanged(dataSnapshot: DataSnapshot, prevChildKey: String?) {}
-            override fun onChildRemoved(dataSnapshot: DataSnapshot) {}
-            override fun onChildMoved(dataSnapshot: DataSnapshot, prevChildKey: String?) {}
-            override fun onCancelled(databaseError: DatabaseError) {}
-        })
+
+                override fun onChildChanged(dataSnapshot: DataSnapshot, prevChildKey: String?) {}
+                override fun onChildRemoved(dataSnapshot: DataSnapshot) {}
+                override fun onChildMoved(dataSnapshot: DataSnapshot, prevChildKey: String?) {}
+                override fun onCancelled(databaseError: DatabaseError) {}
+            })
     }
 
     fun saveScannedUser(user: UserData) {
@@ -102,13 +103,13 @@ class FragmentQrScanner : Fragment() {
 
         user.phoneNumber?.let {
             if (savedPhoneNumber != null) {
-                dataBaseInstance .getReference("Data/Contacts")
-                .child(savedPhoneNumber).child(it).setValue(user).addOnSuccessListener {
-                    Toast.makeText(requireContext(), "Friend Added!", Toast.LENGTH_LONG).show()
+                dataBaseInstance.getReference("Data/Contacts")
+                    .child(savedPhoneNumber).child(it).setValue(user).addOnSuccessListener {
+                        Toast.makeText(requireContext(), "Friend Added!", Toast.LENGTH_LONG).show()
 
-                }.addOnFailureListener {
-                    Toast.makeText(requireContext(), "DataBase Error", Toast.LENGTH_LONG).show()
-                }
+                    }.addOnFailureListener {
+                        Toast.makeText(requireContext(), "DataBase Error", Toast.LENGTH_LONG).show()
+                    }
             }
         }
     }

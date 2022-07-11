@@ -39,10 +39,11 @@ class SocialMediaRecyclerAdapter(private val socialMediaData: ArrayList<SocialMe
     class MyViewHolder(itemView: View, listener: OnUserClickListener) :
         RecyclerView.ViewHolder(itemView) {
         val socialMediaLink: TextView = itemView.findViewById(R.id.userCardViewNameView)
+
         init {
             itemView.setOnClickListener {
 
-                listener.onUserClick(adapterPosition);
+                listener.onUserClick(absoluteAdapterPosition);
             }
         }
     }
