@@ -67,7 +67,7 @@ class UserRecyclerViewAdapter(private val userList: ArrayList<UserData>) :
 
         init {
             itemView.setOnClickListener {
-                listener.onUserClick(adapterPosition)
+                listener.onUserClick(absoluteAdapterPosition)
             }
         }
     }

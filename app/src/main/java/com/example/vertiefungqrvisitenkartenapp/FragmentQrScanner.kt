@@ -141,6 +141,7 @@ class FragmentQrScanner : Fragment() {
     override fun onPause() {
         codeScanner.releaseResources()
         super.onPause()
+
     }
 
 
